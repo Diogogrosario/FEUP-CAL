@@ -13,9 +13,9 @@ Sudoku::Sudoku()
 }
 
 /**
- * Inicia um Sudoku com um conteúdo inicial.
- * Lança excepção IllegalArgumentException se os valores
- * estiverem fora da gama de 1 a 9 ou se existirem números repetidos
+ * Inicia um Sudoku com um conteï¿½do inicial.
+ * Lanï¿½a excepï¿½ï¿½o IllegalArgumentException se os valores
+ * estiverem fora da gama de 1 a 9 ou se existirem nï¿½meros repetidos
  * por linha, coluna ou bloc 3x3.
  *
  * @param nums matriz com os valores iniciais (0 significa por preencher)
@@ -61,7 +61,7 @@ void Sudoku::initialize()
 }
 
 /**
- * Obtem o conteúdo actual (só para leitura!).
+ * Obtem o conteï¿½do actual (sï¿½ para leitura!).
  */
 int** Sudoku::getNumbers()
 {
@@ -79,7 +79,7 @@ int** Sudoku::getNumbers()
 }
 
 /**
- * Verifica se o Sudoku já está completamente resolvido
+ * Verifica se o Sudoku jï¿½ estï¿½ completamente resolvido
  */
 bool Sudoku::isComplete()
 {
@@ -90,11 +90,40 @@ bool Sudoku::isComplete()
 
 /**
  * Resolve o Sudoku.
- * Retorna indicação de sucesso ou insucesso (sudoku impossível).
+ * Retorna indicaï¿½ï¿½o de sucesso ou insucesso (sudoku impossï¿½vel).
  */
 bool Sudoku::solve()
 {
-	return false;
+    if(isComplete()){
+        return true;
+    }
+
+    for(int line = 0;line<9;line++){
+        for(int col = 0;col<9;col++){
+            if(numbers[line][col] == 0) {
+                for (int num = 1; num <= 9; num++) {
+                    if (canPutNumber(line, col, num)) {
+                        numbers[line][col] = num;
+                        columnHasNumber[col][num] = true;
+                        lineHasNumber[line][num] = true;
+                        block3x3HasNumber[line / 3][col / 3][num] = true;
+                        countFilled++;
+                        if (solve())
+                            return true;
+                        else {
+                            numbers[line][col] = 0;
+                            columnHasNumber[col][num] = false;
+                            lineHasNumber[line][num] = false;
+                            block3x3HasNumber[line / 3][col / 3][num] = false;
+                            countFilled--;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+    }
+    return false;
 }
 
 
@@ -111,4 +140,18 @@ void Sudoku::print()
 
 		cout << endl;
 	}
+}
+
+bool Sudoku::canPutNumber(int line,int col,int num){
+    if(lineHasNumber[line][num]){
+        return false;
+    }
+    else if(columnHasNumber[col][num]){
+        return false;
+    }
+    else if(block3x3HasNumber[line/3][col/3][num]){
+        return false;
+    }
+    else
+        return true;
 }
