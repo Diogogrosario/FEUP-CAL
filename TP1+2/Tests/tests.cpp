@@ -13,6 +13,7 @@ using testing::Eq;
 
 
 TEST(CAL_FP01, FactorialTest) {
+
 	EXPECT_EQ(120,factorialRecurs(5));
 	EXPECT_EQ(3628800,factorialRecurs(10));
 	EXPECT_EQ(120,factorialDinam(5));
