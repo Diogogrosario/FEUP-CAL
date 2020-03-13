@@ -94,7 +94,7 @@ bool Sudoku::isComplete()
  */
 bool Sudoku::solve()
 {
-    
+
     if(isComplete()){
         return true;
     }
